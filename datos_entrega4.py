@@ -70,7 +70,7 @@ vehicles_assigned = 0
 for i in P:
     if vehicles_assigned >= len(V):
         break
-    for q in [3, 8, 13]:  # Cuadriculas rurales reducidas
+    for q in [3, 8, 10, 12, 13]:  # Cuadriculas rurales reducidas
         if p_i_q[i,q] == 1:
             a_i_v[(i, vehicles_assigned)] = 1
             vehicles_assigned += 1

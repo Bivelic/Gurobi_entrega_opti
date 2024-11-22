@@ -51,13 +51,20 @@ y = {}
 for v in V:
     y[v] = model.addVar(vtype=GRB.BINARY, name=f'y_{v}')
 
+max_x = {}
+for i in P:
+    max_x[i] = model.addVar(name=f"max_x{i}", vtype=GRB.CONTINUOUS)
+
 # Función objetivo: minimizar tiempo total de evacuación
-model.setObjective(
-    gp.quicksum(x[i,r] for i in P for q in Q for s in S if (q,s) in R_qs for r in R_qs[(q,s)]),
-    GRB.MINIMIZE
-)
+model.setObjective( gp.quicksum(max_x[i] for i in P) , GRB.MINIMIZE)
 
 # Restricciones
+for i in P:
+    for q in Q:
+        for s in S:
+            if (q, s) in R_qs:  # Asegurar que (q, s) esté definido en R_qs
+                for r in R_qs[(q, s)]:
+                    model.addConstr(max_x[i] >= x[i, r], name=f"max_constr_{i}_{q}_{s}_{r}")
 
 # 1. Tiempo de evacuación por ruta
 for i in P:
@@ -165,8 +172,9 @@ model.optimize()
 # Imprimir resultados
 if model.status == GRB.OPTIMAL:
     print("\nResultados de la optimización:")
-    print(f"Tiempo total de evacuación: {model.objVal:.2f} minutos")
-    
+    a = model.objVal
+    print(f"Tiempo total de evacuación: {model.objVal} minutos")
+    print(f"Tiempo promedio de evacuación: {a/len(P)} minutos")
     # Contar personas evacuadas por punto seguro
     evacuados_por_punto = {s: sum(ps[i,s].x for i in P) for s in S}
     print("\nDistribución de evacuados por punto seguro:")
