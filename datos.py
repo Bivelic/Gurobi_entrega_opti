@@ -1,4 +1,4 @@
-"""# Conjuntos principales
+# Conjuntos principales
 P = range(500)  # Personas
 S = range(10)   # Puntos seguros
 Q = range(5)    # Cuadrículas
@@ -69,19 +69,29 @@ for q in Q:
 # Se asegura que sea suficiente para evacuar a las personas de cada cuadrícula
 g_r = {
     # Rutas desde cuadrícula 0
-    ('r_0_0_0'): 70, ('r_0_0_1'): 60, ('r_0_2_0'): 65, ('r_0_4_0'): 70, ('r_0_4_1'): 60,
-    
+    'r_0_0_0': 35, 'r_0_0_1': 30, 'r_0_2_0': 32, 'r_0_4_0': 35, 'r_0_4_1': 30,
     # Rutas desde cuadrícula 1
-    ('r_1_1_0'): 50, ('r_1_1_1'): 50, ('r_1_3_0'): 45, ('r_1_5_0'): 45,
-    
+    'r_1_1_0': 25, 'r_1_1_1': 25, 'r_1_3_0': 22, 'r_1_5_0': 22,
     # Rutas desde cuadrícula 2
-    ('r_2_2_0'): 60, ('r_2_2_1'): 50, ('r_2_4_0'): 55, ('r_2_6_0'): 55,
-    
+    'r_2_2_0': 30, 'r_2_2_1': 25, 'r_2_4_0': 27, 'r_2_6_0': 27,
     # Rutas desde cuadrícula 3
-    ('r_3_3_0'): 50, ('r_3_5_0'): 55, ('r_3_5_1'): 45, ('r_3_7_0'): 50,
-    
+    'r_3_3_0': 25, 'r_3_5_0': 27, 'r_3_5_1': 22, 'r_3_7_0': 25,
     # Rutas desde cuadrícula 4
-    ('r_4_6_0'): 50, ('r_4_8_0'): 55, ('r_4_8_1'): 45, ('r_4_9_0'): 50
+    'r_4_6_0': 25, 'r_4_8_0': 27, 'r_4_8_1': 22, 'r_4_9_0': 25
+}
+
+# Capacidad de las rutas para peatones
+f_r = {
+    # Rutas desde cuadrícula 0
+    'r_0_0_0': 35, 'r_0_0_1': 30, 'r_0_2_0': 33, 'r_0_4_0': 35, 'r_0_4_1': 30,
+    # Rutas desde cuadrícula 1
+    'r_1_1_0': 25, 'r_1_1_1': 25, 'r_1_3_0': 23, 'r_1_5_0': 23,
+    # Rutas desde cuadrícula 2
+    'r_2_2_0': 30, 'r_2_2_1': 25, 'r_2_4_0': 28, 'r_2_6_0': 28,
+    # Rutas desde cuadrícula 3
+    'r_3_3_0': 25, 'r_3_5_0': 28, 'r_3_5_1': 23, 'r_3_7_0': 25,
+    # Rutas desde cuadrícula 4
+    'r_4_6_0': 25, 'r_4_8_0': 28, 'r_4_8_1': 23, 'r_4_9_0': 25
 }
 
 # Tiempo caminando por cada ruta (en minutos)
@@ -109,7 +119,7 @@ t_a = {ruta: int(tiempo * 0.4) for ruta, tiempo in t_c.items()}  # 40% del tiemp
 c_r = {ruta: 3 for ruta in g_r.keys()}
 
 # Umbral de congestión (80% de la capacidad de la ruta)
-l_r = {ruta: int(cap * 0.8) for ruta, cap in g_r.items()}
+l_r = {ruta: int(min(g_r[ruta], f_r[ruta]) * 0.8) for ruta in g_r.keys()}
 
 # Indicador de cuadrícula rural (1) o urbana (0)
 u_q = {
@@ -132,7 +142,8 @@ for i in P:
         vehicles_assigned += 1
 
 # Tiempo máximo para llegar a un lugar seguro (en minutos)
-O = 30"""
+O = 30
+"""
 # Conjuntos principales
 P = range(5000)  # Personas
 S = range(20)    # Puntos seguros
@@ -202,16 +213,27 @@ for q in Q:
         p_i_q[(i, q)] = 1
     current_person += h_q[q]
 
-# Capacidad de las rutas
+# Capacidad de las rutas para vehículos
 g_r = {}
 for q in Q:
     for s in S:
         if (q,s) in R_qs:
             for r in R_qs[(q,s)]:
-                if r.endswith('_0'):  # Ruta principal
-                    g_r[r] = 150  # Capacidad para ruta principal
-                else:  # Ruta alternativa
-                    g_r[r] = 100  # Capacidad para ruta alternativa
+                if r.endswith('_0'):
+                    g_r[r] = 75
+                else:
+                    g_r[r] = 50
+
+# Capacidad de las rutas para peatones
+f_r = {}
+for q in Q:
+    for s in S:
+        if (q,s) in R_qs:
+            for r in R_qs[(q,s)]:
+                if r.endswith('_0'):
+                    f_r[r] = 75
+                else:
+                    f_r[r] = 50
 
 # Tiempo caminando por cada ruta
 t_c = {}
@@ -250,4 +272,4 @@ for i in P:
                 break
 
 # Tiempo máximo para llegar a un lugar seguro
-O = 45
+O = 45"""
