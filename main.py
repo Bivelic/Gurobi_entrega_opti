@@ -51,10 +51,12 @@ for v in V:
     y[v] = model.addVar(vtype=GRB.BINARY, name=f'y_{v}')
 
 
-max_x = model.addVar(name=f"max_x", vtype=GRB.CONTINUOUS)
+max_x = {}
+for v in V:
+    max_x[i]= model.addVar(name=f"max_x{i}", vtype=GRB.CONTINUOUS)
 
 # f.o
-model.setObjective(max_x , GRB.MINIMIZE)
+model.setObjective(gp.quicksum(max_x[i] for i in P) , GRB.MINIMIZE)
 
 # restricciones
 # max_x tiene que ser mayor que le tiempo maximo de cada persona
@@ -63,7 +65,7 @@ for i in P:
         for s in S:
             if (q, s) in R_qs:
                 for r in R_qs[(q, s)]:
-                    model.addConstr(max_x >= x[i, r], name=f"max_constr_{i}_{q}_{s}_{r}")
+                    model.addConstr(max_x[i] >= x[i, r], name=f"max_constr_{i}_{q}_{s}_{r}")
 
 # tiempo de evacuación por ruta
 for i in P:
