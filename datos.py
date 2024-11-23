@@ -166,10 +166,10 @@ R_qs = {
 
 # Distribución inicial de personas en cuadrículas
 h_q = {
-    0: 150,  # 125 personas en cuadrícula 0
-    1: 150,  # 125 personas en cuadrícula 1
-    2: 150,  # 125 personas en cuadrícula 2
-    3: 150   # 125 personas en cuadrícula 3
+    0: 125,  # 125 personas en cuadrícula 0
+    1: 125,  # 125 personas en cuadrícula 1
+    2: 125,  # 125 personas en cuadrícula 2
+    3: 125   # 125 personas en cuadrícula 3
 }
 
 # Matriz de personas en cuadrículas
